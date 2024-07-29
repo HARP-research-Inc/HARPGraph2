@@ -1,0 +1,8 @@
+services:
+  harp_graph_2:
+    build:
+      context: ..
+      dockerfile: testing/dockerfile
+    volumes:
+      - ../HARPGraph2:/usr/src/app/HARPGraph2
+    

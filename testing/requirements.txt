@@ -1,0 +1,14 @@
+pytest-dependency
+python-multipart
+beautifulsoup4
+pygraphviz
+matplotlib
+graphviz
+sagemath
+networkx 
+requests
+clifford
+netgraph
+pytest
+sympy
+numba == 0.58.1

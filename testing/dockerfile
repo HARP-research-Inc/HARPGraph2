@@ -1,0 +1,26 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the local directory contents into the container at /usr/src/app
+COPY . .
+
+# Define environment variable
+ENV NAME World
+
+RUN apt-get update
+
+RUN apt-get install sagemath -y
+
+# Install netwrok debugging packages and visualization packages;
+#? NOTE: Will likely make disablable if running in prod
+
+RUN apt-get install iputils-ping curl net-tools graphviz libgraphviz-dev gcc -y
+
+# Install any needed packages specified in requirements.txt
+RUN pip install -r testing/requirements.txt
+
+# Continue running
+CMD ["sleep", "infinity"]
