@@ -3,9 +3,9 @@
 # HARPGraph2  (v0.1.0)
 A generalized graph library for dealing with generalized graph structures. - Made by Harper Chisari
 
-## PseudoDiGraph
+## MixedDiGraph
 
-`PseudoDiGraph` is a class that supports both directed and undirected edges, as well as hyperedges. It uses an incidence matrix to represent the graph, where:
+`MixedDiGraph` is a class that supports both directed and undirected edges, as well as hyperedges. It uses an incidence matrix to represent the graph, where:
 
 - `1` represents an undirected edge.
 - `0.5` represents a directed edge away from a node.
@@ -31,13 +31,13 @@ A generalized graph library for dealing with generalized graph structures. - Mad
 
 ### Examples
 
-#### Creating a Directed Graph
+#### Creating a Mixed Directed Graph
 
 ```python
-from HARPGraph2 import PseudoDiGraph
+from HARPGraph2 import MixedDiGraph
 
 # Create a directed graph
-graph = PseudoDiGraph(directed=True)
+graph = MixedDiGraph(directed=True)
 graph.add_edge(('A', 'B'))  # Directed edge from A to B
 print("Directed edges:", graph.get_directed_edges())
 graph.plot()  # Displays the plot
@@ -47,10 +47,10 @@ graph.export()  # Saves the plot to the default 'output_images/graph_plot.png'
 #### Creating an Undirected Graph
 
 ```python
-from HARPGraph2 import PseudoDiGraph
+from HARPGraph2 import MixedDiGraph
 
 # Create an undirected graph
-graph = PseudoDiGraph()
+graph = MixedDiGraph()
 graph.add_node('C')
 graph.add_node('D')
 graph.add_edge(('C', 'D'))  # Unordered hyper edge between C and D
@@ -67,10 +67,10 @@ graph.export(output_folder="output_images")  # Saves the plot to the default 'ou
 
 #### Removing Nodes and Edges
 ```python
-from HARPGraph2 import PseudoDiGraph
+from HARPGraph2 import MixedDiGraph
 
 # Create a graph and add nodes and edges
-graph = PseudoDiGraph()
+graph = MixedDiGraph()
 graph.add_node('C')
 graph.add_node('D')
 graph.add_edge(('C', 'D'))  # Unordered hyper edge between C and D

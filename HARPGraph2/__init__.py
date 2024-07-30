@@ -8,8 +8,8 @@ if not is_pytest_running:
     if any(mod_name.startswith('test.') for mod_name in sys.modules):
         raise ImportError("Importing from test modules is not allowed.")
 
-    from .pseudodigraph import PseudoDiGraph
-    from .planarpdgraph import PlanarPDGraph
+    from .mixeddigraph import MixedDiGraph
+    from .planarmdgraph import PlanarMDGraph
 
     # Any other necessary imports
 else:

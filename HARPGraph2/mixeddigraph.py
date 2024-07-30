@@ -4,7 +4,7 @@ import networkx as nx
 import numpy as np
 import os
 
-class PseudoDiGraph:
+class MixedDiGraph:
     def __init__(self, hyper=False, multi=False, adirected=False, directed=False):
         self.nodes = []
         self.plotted_coordinates = {}
@@ -266,13 +266,13 @@ class PseudoDiGraph:
 
 # Example usage
 if __name__ == "__main__":
-    graph1 = PseudoDiGraph()
+    graph1 = MixedDiGraph()
     graph1.add_edge(('A', 'B'))  # Directed edge from A to B
     graph1.add_edge(('B', 'C'))  # Directed edge from B to C
     graph1.add_edge(('C', 'A'))  # Directed edge from C to A
     graph1.add_edge(('A', 'D'))  # Directed edge from A to D
 
-    subgraph = PseudoDiGraph()
+    subgraph = MixedDiGraph()
     subgraph.add_edge(('X', 'Y'))  # Directed edge from X to Y
     subgraph.add_edge(('Y', 'Z'))  # Directed edge from Y to Z
     subgraph.add_edge(('Z', 'X'))  # Directed edge from Z to X

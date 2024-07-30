@@ -1,4 +1,4 @@
-from HARPGraph2.pseudodigraph import PseudoDiGraph
+from HARPGraph2.mixeddigraph import PseudoDiGraph
 # Example usage
 graph = PseudoDiGraph(directed=True)
 graph.add_edge(('A', 'B'))  # Directed edge from A to B

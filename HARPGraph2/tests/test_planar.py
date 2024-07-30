@@ -1,10 +1,10 @@
 import pytest
 import networkx as nx
-from ..planarpdgraph import PlanarPDGraph
+from ..planarpdgraph import PlanarMDGraph
 
 @pytest.mark.dependency()
 def test_to_networkx_conversion():
-    graph = PlanarPDGraph()
+    graph = PlanarMDGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('B', 'C'))
     graph.add_edge(('C', 'D'))
@@ -20,7 +20,7 @@ def test_to_networkx_conversion():
 
 @pytest.fixture
 def planar_graph():
-    graph = PlanarPDGraph()
+    graph = PlanarMDGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('B', 'C'))
     graph.add_edge(('C', 'D'))
@@ -29,7 +29,7 @@ def planar_graph():
 
 @pytest.fixture
 def k5_graph():
-    graph = PlanarPDGraph()
+    graph = PlanarMDGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('A', 'C'))
     graph.add_edge(('A', 'D'))
@@ -44,7 +44,7 @@ def k5_graph():
 
 @pytest.fixture
 def k33_graph():
-    graph = PlanarPDGraph()
+    graph = PlanarMDGraph()
     graph.add_edge(('A', 'D'))
     graph.add_edge(('A', 'E'))
     graph.add_edge(('A', 'F'))

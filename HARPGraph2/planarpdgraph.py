@@ -7,11 +7,11 @@ from matplotlib import pyplot as plt
 is_pytest_running = "pytest" in sys.modules
 
 if is_pytest_running:
-    from HARPGraph2.pseudodigraph import PseudoDiGraph
+    from HARPGraph2.mixeddigraph import MixedDiGraph
 else:
-    from pseudodigraph import PseudoDiGraph
+    from mixeddigraph import MixedDiGraph
 
-class PlanarPDGraph(PseudoDiGraph):
+class PlanarMDGraph(MixedDiGraph):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.faces = {}  # List to store faces as dicts
@@ -338,7 +338,7 @@ class PlanarPDGraph(PseudoDiGraph):
 # Example usage
 if __name__ == "__main__":
 
-    graph = PlanarPDGraph()
+    graph = PlanarMDGraph()
     graph.add_edge(('A', 'B'))  # Directed edge from A to B
     graph.add_edge(('B', 'C'))  # Directed edge from B to C
     graph.add_edge(('C', 'A'))  # Directed edge from C to D
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     for label in ideal_ring:
         print(label, ": ", list(graph.faces[label].keys()))
 
-    graph2 = PlanarPDGraph()
+    graph2 = PlanarMDGraph()
     graph2.add_edge(['A', 'B'])  # Directed edge from A to B
     graph2.add_edge(['B', 'C'])  # Directed edge from B to C
     graph2.add_edge(['C', 'A'])  # Undirected edge from C to A
@@ -397,4 +397,9 @@ if __name__ == "__main__":
     print("Face compatibility: ", comp)
 
     #TODO Figure out why there's no external face including all of teh nodes from face_3
+    # scratch that, refactor to embed an "unordered" version of the graph in networkx and then draw the dual of it. 
+    # I guess we figured out why people dont draw duals; turns out there is a massive amount of possible ones, 
+    # with a nonstandard formula utilizing spherical embeddings:  https://cs.nyu.edu/media/publications/TR1992-603.pdf
+    # reimplement with sphere-planar graph embeddings in the future.
+    # for time being, refocussing on simple planar digraphs which are 3-connected in new branch.
 

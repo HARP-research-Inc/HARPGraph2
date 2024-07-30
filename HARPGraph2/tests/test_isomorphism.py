@@ -1,9 +1,9 @@
 import pytest
-from ..pseudodigraph import PseudoDiGraph
+from ..mixeddigraph import MixedDiGraph
 
 @pytest.fixture
 def graph1():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('B', 'C'))
     graph.add_edge(('C', 'A'))
@@ -11,7 +11,7 @@ def graph1():
 
 @pytest.fixture
 def graph2():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('X', 'Y'))
     graph.add_edge(('Y', 'Z'))
     graph.add_edge(('Z', 'X'))
@@ -19,21 +19,21 @@ def graph2():
 
 @pytest.fixture
 def graph3():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('B', 'C'))
     return graph
 
 @pytest.fixture
 def graph4():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('X', 'Y'))
     graph.add_edge(('Y', 'Z'))
     return graph
 
 @pytest.fixture
 def graph5():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('A', 'B'))
     graph.add_edge(('B', 'C'))
     graph.add_edge(('C', 'D'))
@@ -42,7 +42,7 @@ def graph5():
 
 @pytest.fixture
 def graph6():
-    graph = PseudoDiGraph()
+    graph = MixedDiGraph()
     graph.add_edge(('X', 'Y'))
     graph.add_edge(('Y', 'Z'))
     graph.add_edge(('Z', 'W'))
