@@ -12,7 +12,7 @@ ENV NAME World
 
 RUN apt-get update
 
-RUN apt-get install sagemath -y
+# RUN apt-get install sagemath -y
 
 # Install netwrok debugging packages and visualization packages;
 #? NOTE: Will likely make disablable if running in prod

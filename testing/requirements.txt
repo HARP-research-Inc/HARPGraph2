@@ -4,7 +4,7 @@ beautifulsoup4
 pygraphviz
 matplotlib
 graphviz
-sagemath
+# sagemath
 networkx 
 requests
 clifford

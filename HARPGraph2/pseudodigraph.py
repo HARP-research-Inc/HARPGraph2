@@ -1,6 +1,7 @@
-import numpy as np
-import networkx as nx
+from itertools import permutations, combinations
 import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
 import os
 
 class PseudoDiGraph:
@@ -36,7 +37,7 @@ class PseudoDiGraph:
 
         if isinstance(nodes, tuple):
             u, v = nodes
-            if not self.multi and (u, v) in self.get_directed_edges():
+            if not self.multi and (u, v) in self.get_directed_edges() or (v, u) in self.get_undirected_edges():
                 raise ValueError(f"Multiple edges between {u} and {v} are not allowed in a non-multigraph.")
             for node in nodes:
                 if node not in self.nodes:
@@ -101,6 +102,22 @@ class PseudoDiGraph:
             raise ValueError(f"Edge {nodes} does not exist.")
         
         self.incidence_matrix = np.delete(self.incidence_matrix, col_index[0], axis=1)
+
+    def _to_networkx(self):
+        G = nx.Graph()
+        node_indices = {node: idx for idx, node in enumerate(self.nodes)}
+        
+        for node in self.nodes:
+            G.add_node(node)
+        
+        # run get_directed_edges() and get_undirected_edges() to get the edges
+        for edge in self.get_directed_edges():
+            print("Directed edge:", edge)
+            G.add_edge(edge[0], edge[1])
+        for edge in self.get_undirected_edges():
+            print("Undirected edge:", edge)
+            G.add_edge(edge[0], edge[1])
+        return G
 
     def get_undirected_edges(self, nodes=None):
         undirected_edges = []
@@ -202,32 +219,64 @@ class PseudoDiGraph:
         plt.savefig(os.path.join(output_folder, filename))
         plt.close()
 
-"""# Example usage
-graph = PseudoDiGraph(directed=True)
-graph.add_edge(('A', 'B'))  # Directed edge from A to B
-print("Directed edges:", graph.get_directed_edges())
-graph.plot()  # Displays the plot
-graph.export()  # Saves the plot to the default 'output_images/graph_plot.png'
+    def is_isomorphic(self, other):
+        if len(self.nodes) != len(other.nodes) or self.incidence_matrix.shape != other.incidence_matrix.shape:
+            return False
 
-graph2 = PseudoDiGraph()
-graph2.add_node('C')
-graph2.add_node('D')
-graph2.add_edge(('C', 'D'))  # Unordered hyper edge between C and D
-graph2.add_node('E')
-graph2.add_node('F')
-graph2.add_edge(('D', 'E'))  # Directed edge from D to E
-graph2.add_edge(('E', 'C'))  # Directed edge from E to D
-graph2.add_edge(['C', 'F'])  # Directed edge from C to F
-print("Undirected edges:", graph2.get_undirected_edges())
-print("Directed edges:", graph2.get_directed_edges())
-graph2.plot()  # Displays the plot
-graph2.export(output_folder="output_images")  # Saves the plot to the default 'output_images/graph_plot.png'
+        # Generate all permutations of node mappings
+        node_permutations = permutations(other.nodes)
+        for perm in node_permutations:
+            mapping = {self_node: other_node for self_node, other_node in zip(self.nodes, perm)}
 
-# Removing nodes and edges
-graph2.remove_edge(('C', 'D'))
-graph2.remove_node('E')
-print("Undirected edges after removal:", graph2.get_undirected_edges())
-print("Directed edges after removal:", graph2.get_directed_edges())
-graph2.plot()  # Displays the plot after removals
-graph2.export(output_folder="output_images", filename="graph_plot_after_removal.png")  # Saves the plot to the default 'output_images/graph_plot_after_removal.png'
-"""
+            # Check if the adjacency matrix is preserved under the mapping
+            if self._check_isomorphism(mapping, other):
+                return True
+        return False
+
+    def _check_isomorphism(self, mapping, other):
+        for i, node in enumerate(self.nodes):
+            mapped_index = other.nodes.index(mapping[node])
+            if not np.array_equal(self.incidence_matrix[i], other.incidence_matrix[mapped_index]):
+                return False
+        return True
+
+    def _has_isomorphic_subgraph(self, subgraph):
+        nx_graph = self._to_networkx()
+        GM = nx.algorithms.isomorphism.GraphMatcher(nx_graph, subgraph)
+        return GM.subgraph_is_isomorphic()
+
+    def find_isomorphic_subgraphs(self, subgraph):
+        subgraph_nodes_count = len(subgraph.nodes)
+        subgraph_inc_matrix = subgraph.incidence_matrix
+
+        def is_subgraph_isomorphic(subgraph_matrix, candidate_matrix):
+            for perm in permutations(range(candidate_matrix.shape[0]), subgraph_matrix.shape[0]):
+                permuted_matrix = candidate_matrix[np.ix_(perm, perm)]
+                if np.array_equal(subgraph_matrix, permuted_matrix):
+                    return True
+            return False
+
+        isomorphic_subgraphs = []
+        for nodes_combination in combinations(range(len(self.nodes)), subgraph_nodes_count):
+            candidate_matrix = self.incidence_matrix[np.ix_(nodes_combination, nodes_combination)]
+            if is_subgraph_isomorphic(subgraph_inc_matrix, candidate_matrix):
+                isomorphic_subgraphs.append([self.nodes[i] for i in nodes_combination])
+        
+        return isomorphic_subgraphs
+
+# Example usage
+if __name__ == "__main__":
+    graph1 = PseudoDiGraph()
+    graph1.add_edge(('A', 'B'))  # Directed edge from A to B
+    graph1.add_edge(('B', 'C'))  # Directed edge from B to C
+    graph1.add_edge(('C', 'A'))  # Directed edge from C to A
+    graph1.add_edge(('A', 'D'))  # Directed edge from A to D
+
+    subgraph = PseudoDiGraph()
+    subgraph.add_edge(('X', 'Y'))  # Directed edge from X to Y
+    subgraph.add_edge(('Y', 'Z'))  # Directed edge from Y to Z
+    subgraph.add_edge(('Z', 'X'))  # Directed edge from Z to X
+
+    print("Are the two graphs isomorphic?", graph1.is_isomorphic(subgraph))
+
+    print("Isomorphic subgraphs of the subgraph in graph1:", graph1.find_isomorphic_subgraphs(subgraph))
